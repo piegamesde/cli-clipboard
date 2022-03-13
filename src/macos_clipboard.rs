@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 use crate::common::*;
-use anyhow::{anyhow, Result};
+use crate::Result;
 use objc::runtime::{Class, Object};
 use objc_foundation::{INSArray, INSObject, INSString};
 use objc_foundation::{NSArray, NSDictionary, NSObject, NSString};
@@ -32,11 +32,10 @@ extern "C" {}
 
 impl ClipboardProvider for MacOSClipboardContext {
     fn new() -> Result<MacOSClipboardContext> {
-        let cls =
-            Class::get("NSPasteboard").ok_or_else(|| anyhow!("Class::get(\"NSPasteboard\")"))?;
+        let cls = Class::get("NSPasteboard").ok_or_else(|| "Class::get(\"NSPasteboard\")")?;
         let pasteboard: *mut Object = unsafe { msg_send![cls, generalPasteboard] };
         if pasteboard.is_null() {
-            return Err(anyhow!("NSPasteboard#generalPasteboard returned null"));
+            return Err("NSPasteboard#generalPasteboard returned null".into());
         }
         let pasteboard: Id<Object> = unsafe { Id::from_ptr(pasteboard) };
         Ok(MacOSClipboardContext { pasteboard })
@@ -53,16 +52,12 @@ impl ClipboardProvider for MacOSClipboardContext {
             let obj: *mut NSArray<NSString> =
                 msg_send![self.pasteboard, readObjectsForClasses:&*classes options:&*options];
             if obj.is_null() {
-                return Err(anyhow!(
-                    "pasteboard#readObjectsForClasses:options: returned null",
-                ));
+                return Err("pasteboard#readObjectsForClasses:options: returned null".into());
             }
             Id::from_ptr(obj)
         };
         if string_array.count() == 0 {
-            Err(anyhow!(
-                "pasteboard#readObjectsForClasses:options: returned empty",
-            ))
+            Err("pasteboard#readObjectsForClasses:options: returned empty".into())
         } else {
             Ok(string_array[0].as_str().to_owned())
         }
@@ -75,7 +70,7 @@ impl ClipboardProvider for MacOSClipboardContext {
         if success {
             Ok(())
         } else {
-            Err(anyhow!("NSPasteboard#writeObjects: returned false"))
+            Err("NSPasteboard#writeObjects: returned false".into())
         }
     }
 
