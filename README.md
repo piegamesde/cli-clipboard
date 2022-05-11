@@ -6,6 +6,10 @@ cli-clipboard is a fork of [rust-clipboard](https://github.com/aweinstock314/rus
 
 On Linux it will first attempt to setup a Wayland clipboard provider.  If that fails it will then fallback to the X11 clipboard provider.
 
+Note: On Linux, you'll need to have xorg-dev and libxcb-composite0-dev to compile. On Debian and Ubuntu you can install them with
+
+	sudo apt install xorg-dev libxcb-composite0-dev
+
 ## Examples
 
 Using ClipboardContext to create a clipboard provider:
@@ -53,7 +57,7 @@ fn clear(&mut self) -> anhow::Result<()>;
 
 ### ClipboardContext
 
-- `ClipboardContext` is a type alias for one of {`WindowsClipboardContext`, `OSXClipboardContext`, `LinuxClipboardContext`}, all of which implement `ClipboardProvider`. Which concrete type is chosen for `ClipboardContext` depends on the OS (via conditional compilation). 
+- `ClipboardContext` is a type alias for one of {`WindowsClipboardContext`, `OSXClipboardContext`, `LinuxClipboardContext`}, all of which implement `ClipboardProvider`. Which concrete type is chosen for `ClipboardContext` depends on the OS (via conditional compilation).
 - `WaylandClipboardContext` and `X11ClipboardContext` are also available but generally the correct one will be chosen by `LinuxClipboardContext`.
 
 ### Convenience Functions
