@@ -129,9 +129,7 @@ pub fn get_contents() -> Result<String> {
 /// This uses the platform default behavior for setting clipboard contents.
 /// Other users of the Wayland or X11 clipboard will only see the contents
 /// copied to the clipboard so long as the process copying to the
-/// clipboard exists. If you need the contents of the clipboard to
-/// remain after your application shuts down, consider using the
-/// [set_contents_for_duration](fn.set_contents_for_duration.html) function.
+/// clipboard exists.
 /// MacOS and Windows clipboard contents will stick around after your
 /// application exits.
 ///
